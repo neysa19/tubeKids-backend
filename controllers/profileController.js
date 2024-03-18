@@ -1,5 +1,6 @@
 const Profile = require('../models/profileModel');
 
+// Registrar Perfiles//
 const registerProfile = async (req, res) => {
     const { nombre, avatar, pin, edad, userId } = req.body;
     try {
@@ -20,30 +21,13 @@ const registerProfile = async (req, res) => {
     }
 };
 
-const loginProfile = async (req, res) => {
-    const { nombre, pin } = req.body;
-    try {
-        const user = await Profile.findOne({ nombre, pin });
-        if (!user) {
-            return res.status(401).json({ error: 'Credenciales inválidas' });
-        }
-        res.json({
-            message: 'Inicio de sesión exitoso',
-            userId: user.userId,
-            nombre: user.nombre,
-            role: user.role,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al iniciar sesión' });
-    }
-};
 
 
+// Obtiene los perfiles de acuerdo al usuario Logiado///
 const getProfilesByUserId = async (req, res) => {
-    const { id } = req.params; // Obtener el ID del usuario de req.params
+    const { id } = req.params;
     try {
-        const profiles = await Profile.find({ userId: id }); // Buscar perfiles por el ID de usuario
+        const profiles = await Profile.find({ userId: id });
 
         if (!profiles || profiles.length === 0) {
             return res.status(404).json({ error: 'No se encontraron perfiles para este usuario' });
@@ -54,9 +38,9 @@ const getProfilesByUserId = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los perfiles' });
     }
 };
-
+//ontiene el perfil de acuerdo al Id //
 const getProfile = async (req, res) => {
-    const { id } = req.params; // Obtener el ID del perfil de los parámetros de la URL
+    const { id } = req.params;
     try {
         const profile = await Profile.findById(id);
         if (!profile) {
@@ -68,9 +52,10 @@ const getProfile = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener el perfil' });
     }
 };
+// Actualiza el Perfil con ref ID //
 const updateProfile = async (req, res) => {
-    const { id } = req.params; // Obtener el ID del perfil de los parámetros de la URL
-    const { nombre, pin, avatar, edad } = req.body; // Obtener los datos actualizados del perfil
+    const { id } = req.params;
+    const { nombre, pin, avatar, edad } = req.body;
     try {
         const updatedProfile = await Profile.findByIdAndUpdate(id, { nombre, pin, avatar, edad }, { new: true });
         if (!updatedProfile) {
@@ -83,4 +68,43 @@ const updateProfile = async (req, res) => {
     }
 };
 
-module.exports = { registerProfile, loginProfile, getProfilesByUserId, getProfile, updateProfile };
+// Elimidar por Id//
+
+const deleteProfile = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const profile = await Profile.findById(id);
+        if (!profile) {
+            return res.status(404).json({ error: 'El Perfil no existe' });
+        }
+        await profile.deleteOne();
+        res.status(200).json({ message: ' Perfil eliminado correctamente' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al eliminar el usuario' });
+    }
+}
+
+
+const checkPinProfile = async (req, res) => {
+    const { email, pin } = req.body;
+    try {
+        const profile = await Profile.findOne({ email });
+        if (!profile) {
+            return res.status(401).json({ error: 'Perfil no encontrado' });
+        }
+        if (pin !== profile.pin) {
+            return res.status(401).json({ error: 'PIN incorrecto' });
+        }
+        res.json({
+            message: 'PIN correcto',
+            profileId: profile._id,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al verificar el PIN' });
+    }
+}
+
+
+module.exports = { registerProfile, getProfilesByUserId, getProfile, updateProfile, deleteProfile, checkPinProfile };
