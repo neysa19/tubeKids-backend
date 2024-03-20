@@ -87,16 +87,20 @@ const deleteProfile = async (req, res) => {
 
 
 const checkPinProfile = async (req, res) => {
-    const { email, pin } = req.body;
+    const { nombre, pin } = req.body;
     try {
-        const profile = await Profile.findOne({ email });
+        const profile = await Profile.findOne({ nombre });
         if (!profile) {
             return res.status(401).json({ error: 'Perfil no encontrado' });
         }
         if (pin !== profile.pin) {
+            console.log(pin);
+            console.log(profile.pin);
             return res.status(401).json({ error: 'PIN incorrecto' });
         }
+        console.log("Todo esta bien");
         res.json({
+            success: true,
             message: 'PIN correcto',
             profileId: profile._id,
         });

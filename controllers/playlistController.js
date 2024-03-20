@@ -72,16 +72,11 @@ const obtenerPlaylistsPorUsuario = async (req, res) => {
   // Uso en el enrutador
   const eliminarPlaylist = async (req, res) => {
     const { id } = req.params;
-    const { userId } = req.body;
     try {
-      // Verifica si la playlist existe y pertenece al usuario
-      const playlist = await Playlist.findOne({ _id: id, userId });
+      const playlist = await Playlist.findOneAndDelete({ _id: id });
       if (!playlist) {
-        return res.status(404).json({ error: 'Playlist no encontrada o no pertenece al usuario' });
+        return res.status(404).json({ error: 'Playlist no encontrada' });
       }
-  
-      // Elimina la playlist
-      await playlist.remove();
       res.json({ message: 'Playlist eliminada correctamente', playlist });
     } catch (error) {
       console.error(error);
