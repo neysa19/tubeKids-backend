@@ -1,4 +1,7 @@
 const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 const register = async (req, res) => {
     const { nombre, apellidos, email, pin, password, pais, fechanacimiento } = req.body;
@@ -30,19 +33,28 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: req.body.email });
         if (!user) {
             return res.status(401).json({ error: 'Credenciales inválidas' });
         }
+
+        //if (user.status !== 'active') {
+        //    return res.status(403).json({ message: 'Usuario no activo.' });
+        //  }
+
         if (password !== user.password) {
             return res.status(401).json({ error: 'Credenciales inválidas' });
         }
-        res.json({
+     //   const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(200).json({ 
             message: 'Inicio de sesión exitoso',
             userId: user._id,
             nombre: user.nombre,
             role: user.role,
+           // accessToken  // Envía el token de acceso aquí
         });
+       
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al iniciar sesión' });

@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
     pais: String,
     fechanacimiento: Date,
     role: String,
+    phone: String,
     estado: String,
     validacion: String,
 });
