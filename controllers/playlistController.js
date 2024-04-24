@@ -3,20 +3,21 @@ const User = require('../models/userModel');
 const Profile = require('../models/profileModel');
 
 const crearPlaylist = async (req, res) => {
-  const { nombre, userId, profileId } = req.body;
-  console.log("" + nombre  +"" + userId, + "" + profileId)
+  const { nombre, userId, profileIds } = req.body;
+
   try {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    const profile = await Profile.findById(profileId);
-    if (!profile) {
-      return res.status(404).json({ error: 'Perfil no encontrado' });
+    // Verifica que todos los perfiles existan
+    const profiles = await Profile.find({ _id: { $in: profileIds } });
+    if (profiles.length !== profileIds.length) {
+      return res.status(404).json({ error: 'Al menos uno de los perfiles no fue encontrado' });
     }
 
-    const nuevaPlaylist = new Playlist({ nombre, userId, profileId });
+    const nuevaPlaylist = new Playlist({ nombre, userId, profileIds }); // Cambiar profileId a profileIds
     await nuevaPlaylist.save();
 
     res.status(201).json({ message: 'Playlist creada correctamente', playlist: nuevaPlaylist });
@@ -25,6 +26,7 @@ const crearPlaylist = async (req, res) => {
     res.status(500).json({ error: 'Error al crear la playlist' });
   }
 };
+
 
 
 const obtenerPlaylistsPorUsuario = async (req, res) => {

@@ -7,11 +7,11 @@ const playlistSchema = new mongoose.Schema({
         ref: 'Users', // Referencia al modelo de usuarios
         required: true
     },
-    profileId: {
+    profileIds: [{ // Cambiar profileId a profileIds y definir como array
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'profile', // Referencia al modelo de perfil
+        ref: 'Profile', // Referencia al modelo de perfil
         required: true
-    }
+    }]
 
 
 });

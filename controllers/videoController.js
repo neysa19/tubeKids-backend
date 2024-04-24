@@ -5,7 +5,6 @@ const Playlist = require('../models/playlistModel');
 
 const crearVideo = async (req, res) => {
   const { nombre, url, playlistId } = req.body;
-  console.log (' '+ nombre+'  '+ url+ '  ' +playlistId )
   try {
     
     const playlist = await  Playlist.findById(playlistId);
@@ -43,6 +42,7 @@ const obtenerVideoPorPlaylistId = async (req, res) => {
 
 const obtenerVideoPorUsuario = async (req, res) => {
   const { userId } = req.params;
+  console.log("2");
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -91,6 +91,7 @@ const actualizarVideo = async (req, res) => {
 
 const eliminarVideo = async (req, res) => {
   const { id } = req.params;
+  console.log("id:"+ id)
   try {
     const video = await Video.findByIdAndDelete(id);
     if (!video) {

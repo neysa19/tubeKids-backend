@@ -3,7 +3,6 @@ const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const { register, login, checkPin, getUserById, updateUserById, deleteUserById  } = require("./controllers/userController");
-const { register, login, checkPin, getUserById, updateUserById, deleteUserById  } = require("./controllers/userController");
 const { registerProfile, getProfilesByUserId, getProfile, updateProfile, deleteProfile, checkPinProfile } = require("./controllers/profileController");
 const { crearPlaylist, obtenerPlaylistsPorUsuario, obtenerPlaylistPorId, actualizarPlaylist, eliminarPlaylist } = require("./controllers/playlistController");
 const { Session } = require("./controllers/sessionController");
@@ -196,11 +195,11 @@ app.delete('/playlist/:id', eliminarPlaylist);
 
 
 app.post('/video', crearVideo);
-app.get('/video/:userId', obtenerVideoPorUsuario);
+//app.get('/video/:userId', obtenerVideoPorUsuario);
 app.get('/video/:id', obtenerVideoPorId);
 app.put('/video/:id', actualizarVideo);
 app.delete('/video/:id', eliminarVideo);
-app.get('/video/:playlistId', obtenerVideoPorPlaylistId );
+app.get('/videos/playlist/:playlistId', obtenerVideoPorPlaylistId );
 
 app.listen(port, () => {
   console.log(`Server started at port ${port}`);
