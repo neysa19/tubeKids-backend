@@ -3,6 +3,7 @@ const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const { register, login, checkPin, getUserById, updateUserById, deleteUserById  } = require("./controllers/userController");
+const { register, login, checkPin, getUserById, updateUserById, deleteUserById  } = require("./controllers/userController");
 const { registerProfile, getProfilesByUserId, getProfile, updateProfile, deleteProfile, checkPinProfile } = require("./controllers/profileController");
 const { crearPlaylist, obtenerPlaylistsPorUsuario, obtenerPlaylistPorId, actualizarPlaylist, eliminarPlaylist } = require("./controllers/playlistController");
 const { Session } = require("./controllers/sessionController");
@@ -176,6 +177,9 @@ app.post('/checkPin', checkPin);
 app.get('/getUserById/:id', getUserById);
 app.put('/updateUserById/:id', updateUserById);
 app.delete('/deleteUserById/:id',  Session,  deleteUserById);
+app.get('/getUserById/:id', getUserById);
+app.put('/updateUserById/:id', updateUserById);
+app.delete('/deleteUserById/:id', deleteUserById);
 
 app.post('/registerProfile', registerProfile);
 app.get('/getProfilesByUserId/:id', getProfilesByUserId);

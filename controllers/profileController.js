@@ -98,6 +98,7 @@ const checkPinProfile = async (req, res) => {
             console.log(profile.pin);
             return res.status(401).json({ error: 'PIN incorrecto' });
         }
+        console.log("Todo esta bien");
         res.json({
             success: true,
             message: 'PIN correcto',
